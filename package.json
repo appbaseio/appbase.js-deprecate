@@ -9,5 +9,15 @@
   "author": {
     "name": "Appbase",
     "url": "http://appbase.io"
+  },
+  "devDependencies": {
+    "mocha": "^1.21.5",
+    "chai": "^1.9.2",
+    "sinon" : "*"
+  },
+  "dependencies": {
+    "atomic": "git://github.com/toddmotto/atomic#4ac4ec4a78c62ab95d5690d5fcd13a14717501d0",
+    "bluebird" : "*",
+    "request" : "*"
   }
 }
