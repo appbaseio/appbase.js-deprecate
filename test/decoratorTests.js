@@ -43,10 +43,10 @@ describe('Decorator Behavior', function() {
 
     it("Should provide the default value if the optional argument is not provided", function() {
         var spy = sinon.spy();
-        var decorated = decorator.decorate(spy, null, [{ name : 'param1', validator : 'alphaNumUnder'}, { name : 'param2', validator : 'alphaNumUnder', optional : true, defaultVal : {test:"test"}}, { name : 'param3', validator : 'alphaNumUnder'}]);
+        var decorated = decorator.decorate(spy, null, [{ name : 'param1', validator : 'alphaNumUnder'}, { name : 'param2', validator : 'alphaNumUnder', optional : true, defaultVal : {test:"test"}}, { name : 'param3', validator : 'alphaNumUnder', optional : true, defaultVal : '150'}, { name : 'param4', validator : 'alphaNumUnder'}]);
         decorated('5', '5');
 
-        expect(spy.calledWithMatch('5', {test : 'test'}, '5')).to.be.ok;
+        expect(spy.calledWithMatch('5', {test : 'test'}, '150', '5')).to.be.ok;
     });
 
 });

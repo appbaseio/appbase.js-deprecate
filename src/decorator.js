@@ -4,7 +4,10 @@ function Decorator(validators) {
     this.decorate = function decorate(funktion, thisArg, definitions){
 
         return function decorator() {
-            var thisArguments = Array.prototype.slice.call(arguments);
+            var thisArguments = new Array(arguments.length);
+            for (var i = 0, l = arguments.length; i < l; i++) {
+                thisArguments[i] = arguments[i];
+            }
 
             var messages = [];
 
@@ -12,7 +15,7 @@ function Decorator(validators) {
             var size = definitions.length;
             var requiredCount = 0;
 
-            for(var i = size - 1; i >= 0; i--) {
+            for(var i = 0; i < size; i++) {
                 if(size !== thisArguments.length && definitions[i].optional){
                     thisArguments.splice(i, 0, clone(definitions[i].defaultVal));
                 }
