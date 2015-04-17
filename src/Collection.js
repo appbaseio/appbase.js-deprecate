@@ -1,10 +1,10 @@
 
-function Collection(name, app, http, URL, uuid) {
+function Collection(name, http, URL, uuid) {
 
     var path = "/" + name;
 
     function getPath(key) {
-        return key.indexOf('/') ? path + key : path + "/" + key;
+        return key.indexOf('/') !== -1 ? path + key : path + "/" + key;
     }
     
     this.search = function search(query) {

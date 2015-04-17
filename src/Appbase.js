@@ -1,8 +1,8 @@
 
-function Appbase(http, App, URL) {
+function Appbase(Collection, http, App, URL, HashMap) {
     
     this.app = function app(name, secret) {
-        return new App(new http(name, secret), URL);
+        return new App(Collection, new http(name, secret), URL, new HashMap());
     }
 }
 

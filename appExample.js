@@ -1,23 +1,28 @@
 var HTTP = require("./src/HTTP");
 var App = require("./src/App");
 var Appbase = require("./src/Appbase");
+var Collection = require("./src/Collection");
 var URL = require("./src/URL");
+var hashmap = require("hashmap");
 
-var appbase = new Appbase(HTTP, App, URL);
+var log = console.log.bind(console);
+
+var appbase = new Appbase(Collection, HTTP, App, URL, hashmap);
 
 var AppTest = appbase.app("rest_test", "193dc4d2440146082ea734f36f4f2638");
-// var AppTest = new App(new HTTP("watchlist", "85bf32de5f631d0f6115cf391b87f8d5"), URL);
 
-AppTest.listCollections().then(function() {
-    console.log(JSON.stringify(arguments))
-});
+AppTest.listCollections().then(log);
 
-AppTest.serverTime().then(function() {
-    console.log(JSON.stringify(arguments))
-});
+AppTest.serverTime().then(log);
 
-AppTest.search({"query": { "match_all" : {}}}).then(function() {
-    console.log(JSON.stringify(arguments))
-}, function() {
-    console.log(JSON.stringify(arguments))
-});
+AppTest.search({"query": { "match_all" : {}}}).then(log, log);
+
+var userCollection = AppTest.collection('user');
+
+userCollection.get('1429295999328').then(log);
+
+userCollection.search({"query": { "match_all" : {}}}).then(log);
+
+userCollection.set(new Date().getTime()+'', {
+    name : 'Pedro'
+}).then(log);

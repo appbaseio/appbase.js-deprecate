@@ -16,9 +16,10 @@
     "sinon" : "*"
   },
   "dependencies": {
-    "atomic": "git://github.com/henriquesa/atomic",
+    "atomic-http": "git://github.com/henriquesa/atomic",
     "bluebird" : "*",
     "request-promise" : "*",
-    "xhr2" : "*"
+    "xhr2" : "*",
+    "hashmap" : "2.0.3"
   }
 }
