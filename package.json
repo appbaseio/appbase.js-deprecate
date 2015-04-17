@@ -16,8 +16,9 @@
     "sinon" : "*"
   },
   "dependencies": {
-    "atomic": "git://github.com/toddmotto/atomic#4ac4ec4a78c62ab95d5690d5fcd13a14717501d0",
+    "atomic": "git://github.com/henriquesa/atomic",
     "bluebird" : "*",
-    "request" : "*"
+    "request-promise" : "*",
+    "xhr2" : "*"
   }
 }

@@ -1,5 +1,5 @@
 
-function App(name, secret, http, URL) {
+function App(http, URL) {
 
     this.search = function appSearch(query) {
         return http.post(URL.SEARCH, query);

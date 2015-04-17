@@ -1,7 +1,7 @@
 
 var App = require("../src/App");
 var URL = require("../src/URL");
-var request = require("request");
+var request = require("atomic")(require('xhr2'));
 var sinon = require("sinon");
 var Promise = require("bluebird");
 var chai = require("chai");
@@ -11,7 +11,7 @@ describe('App Behavior', function() {
     var app;
 
     afterEach(function() {
-        ['get', 'post', 'del', 'patch', 'put', 'head'].forEach(function(item) {
+        ['get', 'post', 'put', 'delete'].forEach(function(item) {
             request[item].restore ? request[item].restore() : null;
         });
     });
@@ -27,7 +27,7 @@ describe('App Behavior', function() {
 
             sinon.stub(request, 'get').returns(deferred);
 
-            new App("someName", "someSecret", request, URL).serverTime().then(function(time) {
+            new App(request, URL).serverTime().then(function(time) {
                 expect(now).to.equal(time);
             })
             .then(done);
@@ -37,7 +37,7 @@ describe('App Behavior', function() {
 
             sinon.stub(request, 'get');
 
-            new App("someName", "someSecret", request, URL).serverTime();
+            new App(request, URL).serverTime();
 
             expect(request.get.calledWith(URL.SERVER_TIME))
             .to.ok;
@@ -55,7 +55,7 @@ describe('App Behavior', function() {
 
             sinon.stub(request, 'get').returns(deferred);
 
-            new App("someName", "someSecret", request, URL).listCollections().then(function(response) {
+            new App(request, URL).listCollections().then(function(response) {
                 expect(collections).to.equal(response);
             })
             .then(done);
@@ -65,7 +65,7 @@ describe('App Behavior', function() {
 
             sinon.stub(request, 'get');
 
-            new App("someName", "someSecret", request, URL).listCollections();
+            new App(request, URL).listCollections();
 
             expect(request.get.calledWith(URL.COLLECTIONS))
             .to.ok;
@@ -83,7 +83,7 @@ describe('App Behavior', function() {
 
             sinon.stub(request, 'post').returns(deferred);
 
-            new App("someName", "someSecret", request, URL).search().then(function(response) {
+            new App(request, URL).search().then(function(response) {
                 expect(collections).to.equal(response);
             })
             .then(done);
@@ -97,7 +97,7 @@ describe('App Behavior', function() {
 
             sinon.stub(request, 'post');
 
-            new App("someName", "someSecret", request, URL).search(query);
+            new App(request, URL).search(query);
 
             expect(request.post.calledWith(URL.SEARCH, query))
             .to.ok;
