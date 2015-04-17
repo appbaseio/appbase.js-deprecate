@@ -12,8 +12,17 @@
   },
   "devDependencies": {
     "mocha": "^1.21.5",
+    "sinon" : "*",
+    "async": "^0.9.0",
+    "mocha": "^1.21.5",
     "chai": "^1.9.2",
-    "sinon" : "*"
+    "vinyl-transform": "0.0.1",
+    "gulp": "^3.8.8",
+    "gulp-uglify": "^1.0.1",
+    "browserify": "^6.1.0",
+    "gulp-rename": "^1.2.0",
+    "oauth-js": "git://github.com/oauth-io/oauth-js",
+    "gulp-insert": "^0.4.0"
   },
   "dependencies": {
     "atomic-http": "git://github.com/henriquesa/atomic",

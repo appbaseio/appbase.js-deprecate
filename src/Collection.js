@@ -39,7 +39,7 @@ function Collection(name, http, URL, uuid) {
     
     this.on = function on(key, callback) {
         var entryPath = getPath(key);
-        return http.on(entryPath, callback);
+        http.on(entryPath, callback);
     }
     
     this.off = function off(key, callback) {

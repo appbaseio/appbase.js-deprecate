@@ -1,5 +1,6 @@
+var xhr = typeof window !== 'undefined' && window.XMLHttpRequest ? window : require('xhr2');
 
-var atomic = require("atomic-http")(require('xhr2'));
+var atomic = require("atomic-http")(xhr);
 var Promise = require("bluebird");
 var URL = require("../src/URL");
 
@@ -32,6 +33,16 @@ function HTTP (appname, secret) {
         var method = methods[i];
         this[method] = xhrBuilder(method);
     }
+
+    this.on = function(url, callback) {
+        atomic.get({
+            url : URL.ROOT + '/' + appname + url + '?streamonly=true',
+            headers : {
+                'Appbase-Secret' : secret
+            }
+        })
+        .notify(callback);
+    };
 
 }
 

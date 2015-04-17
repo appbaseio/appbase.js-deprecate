@@ -11,18 +11,27 @@ var appbase = new Appbase(Collection, HTTP, App, URL, hashmap);
 
 var AppTest = appbase.app("rest_test", "193dc4d2440146082ea734f36f4f2638");
 
-AppTest.listCollections().then(log);
+// AppTest.listCollections().then(log);
 
-AppTest.serverTime().then(log);
+// AppTest.serverTime().then(log);
 
-AppTest.search({"query": { "match_all" : {}}}).then(log, log);
+// AppTest.search({"query": { "match_all" : {}}}).then(log, log);
 
 var userCollection = AppTest.collection('user');
 
-userCollection.get('1429295999328').then(log);
+// userCollection.get('1429295999328').then(log);
 
-userCollection.search({"query": { "match_all" : {}}}).then(log);
+// userCollection.search({"query": { "match_all" : {}}}).then(log);
 
-userCollection.set(new Date().getTime()+'', {
-    name : 'Pedro'
-}).then(log);
+setTimeout(function() {
+    log("sdsd")
+
+    userCollection.set('1123', {
+        name : 'Pedro'
+    });
+
+}, 1000);
+
+userCollection.on('1123', function(argument) {
+    log("called")
+});
