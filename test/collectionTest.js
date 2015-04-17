@@ -1,11 +1,12 @@
 
 var App = require("../src/App");
 var URL = require("../src/URL");
-var request = require("request");
+var HTTP = require("../src/HTTP");
 var sinon = require("sinon");
 var Promise = require("bluebird");
 var chai = require("chai");
 var expect = chai.expect;
+var request = new HTTP();
 
 var Collection = require("../src/Collection");
 
@@ -13,7 +14,7 @@ describe('Collection Behavior', function() {
     var collection;
 
     afterEach(function() {
-        ['get', 'post', 'del', 'patch', 'put', 'head'].forEach(function(item) {
+        Object.keys(request).forEach(function(item) {
             request[item].restore ? request[item].restore() : null;
         });
     });
@@ -29,7 +30,7 @@ describe('Collection Behavior', function() {
 
             sinon.stub(request, 'post').returns(deferred);
 
-            new Collection("someName", {}, request, URL).search({}).then(function(response) {
+            new Collection("someName", request, URL).search({}).then(function(response) {
                 expect(data).to.equal(response);
             })
             .then(done);
@@ -43,7 +44,7 @@ describe('Collection Behavior', function() {
 
             sinon.stub(request, 'post');
 
-            new Collection("someName", {}, request, URL).search(query);
+            new Collection("someName", request, URL).search(query);
 
             expect(request.post.args[0][0].indexOf(URL.SEARCH) !== -1).to.be.ok;
             expect(request.post.args[0][1] === query).to.be.ok;
