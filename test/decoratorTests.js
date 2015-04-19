@@ -1,6 +1,7 @@
 
 var validator = require("../src/validators");
 var Decorator = require("../src/decorator");
+var App = require("../src/App");
 var chai = require("chai");
 var sinon = require("sinon");
 var expect = chai.expect;
@@ -21,6 +22,16 @@ describe('Decorator Behavior', function() {
         var decorated = decorator.decorate(EMPTY, null, []);
         expect(decorated).not.to.equals(EMPTY);
         expect(decorated.name).to.equals('decorator');
+    });
+
+    it("Should decorate a class", function() {
+        var decoratedClass = decorator.decorateAll(App);
+        var instance = new decoratedClass();
+        expect(decoratedClass).not.to.equals(App);
+        expect(instance.serverTime.name).to.be.equals('serverTime');
+        expect(instance.collection.name).to.be.equals('decorator');
+
+        expect(instance.collection).to.throw('Not enough parameters. You should provide: name(required)');
     });
 
     it("Should bind the this to the function", function() {

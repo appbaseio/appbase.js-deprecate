@@ -28,11 +28,24 @@ function Decorator(validators) {
                 !definition.optional && message ? messages.push(message) : null;
             };
 
-            arguments.length < requiredCount ? notEnough(definitions, arguments) : showMessages(messages, arguments);
+            arguments.length < requiredCount ? notEnough(definitions, arguments) : showMessages(messages, arguments, definitions);
 
             return funktion.apply(thisArg, thisArguments);
         };
     }
+
+    this.decorateAll = function(Class) {
+        var decorator = this;
+        return function ClassDecorator() {
+            Class.apply(this, arguments);
+            for(var i in Class){
+                var definition = Class[i];
+                if(Object.hasOwnProperty.call(this, i) && typeof(this[i]) === 'function' && definition.definitions){
+                    this[i] = decorator.decorate(this[i], this, definition.definitions);
+                }
+            }
+        }
+    };
 
     this.addvalidator = function(validator) {
         validators.push(validator);
@@ -43,16 +56,20 @@ function Decorator(validators) {
     }
 
     function notEnough (definitions, args) {
-        throw new Error("Not enough parameters. You should provide: " + definitions.map(function(definition) {
-            return definition.name + (definition.optional ? '(optional)' : '(required)');
-        }).join(', '));
+        throw new Error("Not enough parameters. You should provide: " + getNames(definitions));
     }
 
-    function showMessages (messages, args) {
+    function getNames (definitions) {
+        return definitions.map(function(definition) {
+            return definition.name + (definition.optional ? '(optional)' : '(required)');
+        }).join(', ')
+    }
+
+    function showMessages (messages, args, definitions) {
         if(messages.length){
-            var argumentNames = args.length ? Array.prototype.slice.call(args).join(', ') : "None";
-            var msg = "Invalid arguments provided: " + argumentNames + ". Valid Arguments are: ";
-            throw new Error(msg + messages.join(", "));
+            var argumentNames = args.length ? Array.prototype.slice.call(args).join('", "') : "None";
+            var msg = "Invalid arguments provided: \"" + argumentNames + "\". Valid Arguments are: " + getNames(definitions);
+            throw new Error(msg + ". Errors: " + messages.join(", "));
         }
     }
 

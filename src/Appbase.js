@@ -1,3 +1,4 @@
+var DefinitionBuilder = require('./DefinitionBuilder');
 
 function Appbase(Collection, http, App, URL, HashMap) {
     
@@ -5,5 +6,13 @@ function Appbase(Collection, http, App, URL, HashMap) {
         return new App(Collection, new http(name, secret), URL, new HashMap());
     }
 }
+
+Appbase.app = DefinitionBuilder.build().add()
+    .name('name')
+    .validator('appName')
+    .add()
+    .name('secret')
+    .validator('secret')
+    .end();
 
 module.exports = Appbase;

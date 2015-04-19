@@ -1,3 +1,4 @@
+var DefinitionBuilder = require('./DefinitionBuilder');
 
 function Collection(name, http, URL, uuid) {
 
@@ -44,7 +45,7 @@ function Collection(name, http, URL, uuid) {
     
     this.off = function off(key, callback) {
         var entryPath = getPath(key);
-        return http.off(entryPath, callback); // Listeners added to the promise returned by on wouldn't work
+        return http.off(entryPath, callback);
     }
     
     this.onDocuments = function onDocuments(key, callback) {
@@ -79,7 +80,125 @@ function Collection(name, http, URL, uuid) {
     this['delete'] = function deleteKey(key) {
         return http.get(getPath(key), { "all" : true });
     }
-
 }
+
+Collection.search = DefinitionBuilder.build().add()
+    .name('query')
+    .validator('instanceOf')
+    .type(Object)
+    .end();
+
+Collection.insert = DefinitionBuilder.build().add()
+    .name('entry')
+    .validator('instanceOf')
+    .type(Object)
+    .end();
+
+Collection.set = DefinitionBuilder.build().add()
+    .name('key')
+    .validator('documentKey')
+    .add()
+    .name('entry')
+    .validator('instanceOf')
+    .type(Object)
+    .end();
+
+Collection.unset = DefinitionBuilder.build().add()
+    .name('key')
+    .validator('documentKey')
+    .add()
+    .name('property')
+    .validator('instanceOf')
+    .type(Object)
+    .end();
+
+Collection.get = DefinitionBuilder.build().add()
+    .name('key')
+    .validator('documentKey')
+    .end();
+
+Collection.getAll = DefinitionBuilder.build().add()
+    .name('filters')
+    .validator('instanceOf')
+    .type(Object)
+    .optional()
+    .end();
+
+Collection.on = DefinitionBuilder.build().add()
+    .name('key')
+    .validator('documentKey')
+    .add()
+    .name('callback')
+    .validator('instanceOf')
+    .type(Function)
+    .end();
+
+Collection.onDocuments = DefinitionBuilder.build().add()
+    .name('key')
+    .validator('documentKey')
+    .add()
+    .name('callback')
+    .validator('instanceOf')
+    .type(Function)
+    .end();
+
+Collection.onRef = DefinitionBuilder.build().add()
+    .name('key')
+    .validator('documentKey')
+    .add()
+    .name('callback')
+    .validator('instanceOf')
+    .type(Function)
+    .end();
+
+Collection.off = DefinitionBuilder.build().add()
+    .name('key')
+    .validator('documentKey')
+    .add()
+    .name('callback')
+    .validator('instanceOf')
+    .type(Function)
+    .optional()
+    .end();
+
+Collection.getRefs = DefinitionBuilder.build().add()
+    .name('key')
+    .validator('documentKey')
+    .add()
+    .name('filters')
+    .validator('instanceOf')
+    .type(Object)
+    .optional()
+    .end();
+
+Collection.unsetRef = DefinitionBuilder.build().add()
+    .name('key')
+    .validator('documentKey')
+    .add()
+    .name('properties')
+    .validator('typeOf')
+    .type(['object', 'string'])
+    .end();
+
+Collection.setRef = DefinitionBuilder.build().add()
+    .name('key')
+    .validator('documentKey')
+    .add()
+    .name('ref')
+    .validator('instanceOf')
+    .type(Object)
+    .add()
+    .name('path')
+    .validator('documentPath')
+    .add()
+    .name('priority')
+    .validator('number')
+    .optional()
+    .end();
+
+Collection['delete'] = DefinitionBuilder.build().add()
+    .name('key')
+    .validator('documentKey')
+    .end();
 
 module.exports = Collection

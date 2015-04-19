@@ -1,3 +1,4 @@
+var DefinitionBuilder = require('./DefinitionBuilder');
 
 function App(Collection, http, URL, map) {
 
@@ -17,5 +18,17 @@ function App(Collection, http, URL, map) {
         return map.has(name) ? map.get(name) : map.set(name, new Collection(name, http, URL)).get(name);
     }
 }
+
+App.search = DefinitionBuilder.build().add()
+    .name('query')
+    .validator('instanceOf')
+    .type(Object)
+    .end();
+
+App.collection = DefinitionBuilder.build().add()
+    .name('name')
+    .validator('asciiExcept3')
+    .end();
+
 
 module.exports = App;
