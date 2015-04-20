@@ -47,8 +47,8 @@ function Decorator(validators) {
         }
     };
 
-    this.addvalidator = function(validator) {
-        validators.push(validator);
+    this.addvalidator = function(name, validator) {
+        validators[name] = validator;
     };
 
     function getValidator(definition) {
