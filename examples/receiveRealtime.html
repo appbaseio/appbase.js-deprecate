@@ -25,10 +25,11 @@
             });
 
             function test (argument) {
+                userCollection.set(new Date().getTime()+'', {
+                    name : new Date().getTime()
+                });
+                    
                 setTimeout(function() {
-                    userCollection.set(new Date().getTime()+'', {
-                        name : new Date().getTime()
-                    });
                     test()
                 }, 5000);
             }
