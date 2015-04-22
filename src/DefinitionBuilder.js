@@ -13,6 +13,12 @@ function DefinitionBuilder () {
         return this;
     }
     
+    this.check = function (name) {
+        this.add();
+        last().name = name;
+        return this;
+    }
+    
     this.optional = function () {
         last().optional = true;
         return this;

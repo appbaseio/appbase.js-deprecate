@@ -22,16 +22,22 @@ var userCollection = AppTest.collection('user');
 // userCollection.get('1429295999328').then(log);
 
 // userCollection.search({"query": { "match_all" : {}}}).then(log);
-
+function test (argument) {
+    // body...
 setTimeout(function() {
-    log("sdsd")
 
-    userCollection.set('1123', {
-        name : 'Pedro'
+
+    userCollection.set('sagss', {
+        name : '1123'
     });
 
-}, 1000);
+    test()
+}, 5000);
 
-userCollection.on('1123', function(argument) {
-    log("called")
+}
+
+test();
+
+userCollection.onDocuments(function(argument) {
+    log("arguments")
 });

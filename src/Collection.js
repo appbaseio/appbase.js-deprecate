@@ -39,16 +39,16 @@ function Collection(name, http, URL, uuid) {
     }
     
     this.on = function on(key, callback) {
-        var entryPath = getPath(key);
+        var entryPath = getPath(key) + URL.PROPERTIES;
         http.on(entryPath, callback);
     }
     
     this.off = function off(key, callback) {
-        var entryPath = getPath(key);
+        var entryPath = getPath(key) + URL.PROPERTIES;
         return http.off(entryPath, callback);
     }
     
-    this.onDocuments = function onDocuments(key, callback) {
+    this.onDocuments = function onDocuments(callback) {
         var entryPath = getPath(URL.DOCUMENTS);
         return http.on(entryPath, callback);
     }
@@ -86,6 +86,7 @@ Collection.search = DefinitionBuilder.build().add()
     .name('query')
     .validator('instanceOf')
     .type(Object)
+    .optional()
     .end();
 
 Collection.insert = DefinitionBuilder.build().add()
@@ -134,9 +135,6 @@ Collection.on = DefinitionBuilder.build().add()
     .end();
 
 Collection.onDocuments = DefinitionBuilder.build().add()
-    .name('key')
-    .validator('documentKey')
-    .add()
     .name('callback')
     .validator('instanceOf')
     .type(Function)
