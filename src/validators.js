@@ -74,7 +74,7 @@ validator.documentPath = {
 validator.documentKey = {
     validate : function(input, definition) {
         input = typeof input === "string" && input !== "" ? Utils.cutLeadingTrailingSlashes(input) : '';
-        var e = validator.asciiExcept3(input, definition);
+        var e = validator.asciiExcept3.validate(input, definition);
         if(e) return e;
     }
 };
@@ -86,6 +86,5 @@ validator.number = {
         }
     }
 };
-
 
 module.exports = validator;
