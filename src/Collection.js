@@ -50,7 +50,27 @@ function Collection(name, http, URL, uuid) {
     
     this.onDocuments = function onDocuments(callback) {
         var entryPath = getPath(URL.DOCUMENTS);
-        return http.on(entryPath, callback);
+
+        return http.on(entryPath, function(objects, xhrObj){
+            // if(typeof(objects) !== 'string' || objects.length < 2) {
+            //     var _undefined = void(0);
+            //     callback(_undefined, xhrObj, 'Unexpected server return.')
+            //     return;
+            // }
+
+            var array = objects.substring(0, objects.length - 1);
+
+            try {
+                array = JSON.parse('[' + array + ']');
+            } catch(e) {
+                callback(objects, xhrObj);
+                return;
+            }
+
+            for(var i = 0, length = array.length; i < length; i++){
+                callback(array[i], xhrObj);
+            }
+        });
     }
     
     this.onRef = function onRef(key, callback) {

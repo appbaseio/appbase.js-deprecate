@@ -1,4 +1,3 @@
-
 function Decorator(validators) {
 
     this.decorate = function decorate(funktion, thisArg, definitions){
