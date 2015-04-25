@@ -21,8 +21,8 @@ function App(Collection, http, URL, map) {
 
 App.search = DefinitionBuilder.build().add()
     .name('query')
-    .validator('instanceOf')
-    .type(Object)
+    .validator('typeOf')
+    .type('object')
     .end();
 
 App.collection = DefinitionBuilder.build().add()

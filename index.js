@@ -8,8 +8,13 @@ var Collection = require("./src/Collection");
 var URL = require("./src/URL");
 var hashmap = require("hashmap");
 
+var xhr = typeof window !== 'undefined' && window.XMLHttpRequest ? window : require('xhr2');
+
+var atomic = require("atomic-http")(xhr);
+var Promise = require("bluebird");
+
 var AppbaseClass = Decorator.decorateAll(require('./src/Appbase'));
 
-Appbase = new AppbaseClass(Decorator.decorateAll(Collection), HTTP, Decorator.decorateAll(App), URL, hashmap);
+Appbase = new AppbaseClass(Decorator.decorateAll(Collection), HTTP, Decorator.decorateAll(App), URL, hashmap, Promise, atomic, URL);
 
 module.exports = Appbase;

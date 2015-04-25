@@ -1,9 +1,9 @@
 var DefinitionBuilder = require('./DefinitionBuilder');
 
-function Appbase(Collection, http, App, URL, HashMap) {
+function Appbase(Collection, http, App, URL, HashMap, Promise, atomic) {
     
     this.app = function app(name, secret) {
-        return new App(Collection, new http(name, secret), URL, new HashMap());
+        return new App(Collection, new http(name, secret, new HashMap(), Promise, atomic, URL), URL, new HashMap());
     }
 }
 

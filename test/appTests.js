@@ -8,10 +8,19 @@ var Promise = require("bluebird");
 var hashmap = require("hashmap");
 var chai = require("chai");
 var expect = chai.expect;
-var request = new HTTP();
+
+
+var xhr = typeof window !== 'undefined' && window.XMLHttpRequest ? window : require('xhr2');
+var atomic = require("atomic-http")(xhr);
+
+var request = new HTTP('appname', 'secret', hashmap, Promise, atomic, URL);
 
 describe('App Behavior', function() {
     var app;
+
+    beforeEach(function() {
+        app = new App(Collection, request, URL, new hashmap());
+    });
 
     afterEach(function() {
         Object.keys(request).forEach(function(item) {
@@ -30,7 +39,7 @@ describe('App Behavior', function() {
 
             sinon.stub(request, 'get').returns(deferred);
 
-            new App(Collection, request, URL, new hashmap()).serverTime().then(function(time) {
+            app.serverTime().then(function(time) {
                 expect(now).to.equal(time);
             })
             .then(done);
@@ -40,7 +49,7 @@ describe('App Behavior', function() {
 
             sinon.stub(request, 'get');
 
-            new App(Collection, request, URL, new hashmap()).serverTime();
+            app.serverTime();
 
             expect(request.get.calledWith(URL.SERVER_TIME))
             .to.ok;
@@ -58,7 +67,7 @@ describe('App Behavior', function() {
 
             sinon.stub(request, 'get').returns(deferred);
 
-            new App(Collection, request, URL, new hashmap()).listCollections().then(function(response) {
+            app.listCollections().then(function(response) {
                 expect(collections).to.equal(response);
             })
             .then(done);
@@ -68,10 +77,22 @@ describe('App Behavior', function() {
 
             sinon.stub(request, 'get');
 
-            new App(Collection, request, URL, new hashmap()).listCollections();
+            app.listCollections();
 
             expect(request.get.calledWith(URL.COLLECTIONS))
             .to.ok;
+        });
+
+        it("Should call the get a new collection and cache it", function() {
+
+            sinon.stub(request, 'get');
+
+            var collection = app.collection('user');
+
+            var collection2 = app.collection('user');
+
+            expect(collection).to.an.instanceOf(Collection);
+            expect(collection).to.equal(collection2);
         });
     });
 
@@ -86,7 +107,7 @@ describe('App Behavior', function() {
 
             sinon.stub(request, 'post').returns(deferred);
 
-            new App(Collection, request, URL, new hashmap()).search().then(function(response) {
+            app.search().then(function(response) {
                 expect(collections).to.equal(response);
             })
             .then(done);
@@ -100,7 +121,7 @@ describe('App Behavior', function() {
 
             sinon.stub(request, 'post');
 
-            new App(Collection, request, URL, new hashmap()).search(query);
+            app.search(query);
 
             expect(request.post.calledWith(URL.SEARCH, query))
             .to.ok;

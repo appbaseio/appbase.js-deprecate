@@ -6,7 +6,13 @@ var sinon = require("sinon");
 var Promise = require("bluebird");
 var chai = require("chai");
 var expect = chai.expect;
-var request = new HTTP();
+var hashmap = require("hashmap");
+
+
+var xhr = typeof window !== 'undefined' && window.XMLHttpRequest ? window : require('xhr2');
+var atomic = require("atomic-http")(xhr);
+
+var request = new HTTP('appname', 'secret', hashmap, Promise, atomic, URL);
 
 var Collection = require("../src/Collection");
 
@@ -14,7 +20,11 @@ describe('Collection Behavior', function() {
     var collection;
 
     beforeEach(function() {
-        collection = new Collection("someName", request, URL);
+        collection = new Collection("someName", request, URL, {
+            uuid4 : function  () {
+                return 'UUID';
+            }
+        });
     });
 
     afterEach(function() {
@@ -162,6 +172,32 @@ describe('Collection Behavior', function() {
             expect(request.patch.calledWithMatch("/someName/key" + URL.PROPERTIES, entry)).to.be.ok;
         });
 
+        it("Should remove the properties from a Document on the Collection", function() {
+
+            var properties = {
+                properties : ['name']
+            };
+
+            sinon.stub(request, 'delete');
+
+            collection.unset('key', properties.properties);
+
+            expect(request.delete.calledWith("/someName/key" + URL.PROPERTIES, properties)).to.be.ok;
+        });
+
+        it("Should insert a new Document on the Collection", function() {
+
+            var entry = {
+                test : 'dsfgh'
+            };
+
+            sinon.stub(request, 'patch');
+
+            collection.insert(entry);
+
+            expect(request.patch.calledWithMatch('UUID', entry)).to.be.ok;
+        });
+
         it("Should delete References from the Document", function() {
 
             var references = {
@@ -194,15 +230,15 @@ describe('Collection Behavior', function() {
             expect(request.on.calledWith("/someName/key" + URL.PROPERTIES, spy)).to.be.ok;
         });
 
-        it("Should remove the callback on newly added Documents on the collection", function() {
+        it("Should remove the callback added on the collection", function() {
 
             var spy = sinon.spy();
 
-            sinon.stub(request, 'on');
+            sinon.stub(request, 'off');
 
-            collection.off('key', spy);
+            collection.off(spy);
 
-            expect(request.off.calledWith("/someName/key" + URL.PROPERTIES, spy)).to.be.ok;
+            expect(request.off.calledWith(spy)).to.be.ok;
         });
 
         it("Should delete the Documents from the collection", function() {
