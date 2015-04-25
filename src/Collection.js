@@ -54,7 +54,7 @@ function Collection(name, http, URL, uuid) {
     }
     
     this.onRef = function onRef(key, callback) {
-        var entryPath = getPath(URL.REFERENCES);
+        var entryPath = getPath(key) + URL.REFERENCES;
         return http.on(entryPath, callback);
     }
     
@@ -78,7 +78,7 @@ function Collection(name, http, URL, uuid) {
     }
     
     this['delete'] = function deleteKey(key) {
-        return http.get(getPath(key), { "all" : true });
+        return http['delete'](getPath(key), { "all" : true });
     }
 }
 

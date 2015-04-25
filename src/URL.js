@@ -7,6 +7,7 @@ URL.SEARCH      = "/~search";
 URL.COLLECTIONS = "/~collections";
 URL.SERVER_TIME = "/~timestamp";
 URL.PROPERTIES  = "/~properties";
+URL.REFERENCES  = "/~references";
 URL.DOCUMENTS   = "/~documents";
 
 URL.get = function getURL(url) {
