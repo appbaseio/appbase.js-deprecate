@@ -29,26 +29,26 @@ function HTTP (appname, secret, callbackToRequest, Promise, atomic, URL) {
         this[method] = xhrBuilder(method);
     }
 
-    this.on = function(url, callback) {
+    this.on = function(url, callback, errorCallback) {
         atomic.get({
             url : URL.ROOT + '/' + appname + url + '?streamonly=true',
             headers : {
                 'Appbase-Secret' : secret
             },
             beforeSend : function(request){
-                var requests = callbackToRequest.has(callback) ? callbackToRequest.has(callback) : [];
+                var requests = callbackToRequest.has(callback) ? callbackToRequest.get(callback) : [];
                 requests.push(request);
                 callbackToRequest.set(callback, requests);
             }
         })
-        .notify(function on (response) {
+        .notify(function on(objects) {
             var arrayInner = objects.substring(0, objects.length - 1);
             var array;
 
             try {
                 array = JSON.parse('[' + arrayInner + ']');
             } catch(e) {
-                console.log('Invalid JSON object: ' + arrayInner);
+                errorCallback('Invalid JSON object: ' + arrayInner);
                 return;
             }
 
@@ -63,7 +63,9 @@ function HTTP (appname, secret, callbackToRequest, Promise, atomic, URL) {
         requests.forEach(function(request) {
             try {
                 request.abort();
-            } catch(e){}
+            } catch(e){
+                console.log(e)
+            }
         });
 
         callbackToRequest.remove(callback);

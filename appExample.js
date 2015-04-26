@@ -4,10 +4,14 @@ var Appbase = require("./src/Appbase");
 var Collection = require("./src/Collection");
 var URL = require("./src/URL");
 var hashmap = require("hashmap");
+var xhr = typeof window !== 'undefined' && window.XMLHttpRequest ? window : require('xhr2');
+
+var atomic = require("atomic-http")(xhr);
+var Promise = require("bluebird");
 
 var log = console.log.bind(console);
 
-var appbase = new Appbase(Collection, HTTP, App, URL, hashmap);
+var appbase = new Appbase(Collection, HTTP, App, URL, hashmap, Promise, atomic, URL);
 
 var AppTest = appbase.app("rest_test", "193dc4d2440146082ea734f36f4f2638");
 
@@ -19,25 +23,33 @@ var AppTest = appbase.app("rest_test", "193dc4d2440146082ea734f36f4f2638");
 
 var userCollection = AppTest.collection('user');
 
-// userCollection.get('1429295999328').then(log);
+// userCollection.get('sagar').then(log);
 
 // userCollection.search({"query": { "match_all" : {}}}).then(log);
 function test (argument) {
-    // body...
-setTimeout(function() {
-
-
+    log('set')
     userCollection.set('sagss', {
         name : '1123'
     });
-
-    test()
-}, 5000);
+    setTimeout(test, 1000);
 
 }
 
 test();
 
-userCollection.onDocuments(function(argument) {
-    log("arguments")
+function cb(argument) {
+    log("First Notify")
+}
+
+userCollection.onDocuments(cb);
+userCollection.onDocuments(cb);
+userCollection.onDocuments(cb);
+userCollection.onDocuments(cb);
+userCollection.onDocuments(function (argument) {
+    log("Another Notify")
 });
+
+setTimeout(function() {
+    log("Removing First Notify")
+    userCollection.off(cb)
+}, 5000);
