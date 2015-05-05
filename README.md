@@ -11,7 +11,7 @@ The Appbase object is responsible for instantiating Apps.
 ----------
  **Methods**  
 **Appbase.app(appname, secret)**  
-Used to create a new instance of a App
+Used to create a new instance of a App  
 Parameters:
  - appname: String - The name of the app on your appbase dashboard
  - secret: String - The secret of the app
