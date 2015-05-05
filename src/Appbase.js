@@ -1,9 +1,14 @@
 var DefinitionBuilder = require('./DefinitionBuilder');
 
-function Appbase(Collection, http, App, URL, HashMap, Promise, atomic) {
+function Appbase(Collection, http, App, URL, HashMap, Promise, atomic, AuthService, Auth) {
     
     this.app = function app(name, secret) {
-        return new App(Collection, new http(name, secret, new HashMap(), Promise, atomic, URL), URL, new HashMap());
+        var appHttp =  new http(name, secret, new HashMap(), Promise, atomic, URL);
+        var app = new App(Collection, appHttp, URL, new HashMap());
+        if(typeof window !== undefined){
+            app.oauth = new AuthService(new Auth(appHttp));
+        }
+        return app;
     }
 }
 

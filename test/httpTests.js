@@ -64,6 +64,27 @@ describe('HTTP Wrapper Behavior', function() {
         it("The implementation of 'off' must return undefined", function() {
             expect(http.off()).to.be.undefined;
         });
+
+        it("Should add the callback to the map and then remove it", function() {            
+            var requestReturn = {};
+            var spy = sinon.spy();
+            requestReturn.notify = sinon.stub().returns(requestReturn);
+            sinon.stub(request, 'get').returns(requestReturn);
+
+            http.on(URL.ROOT, spy);
+
+            request.get.args[0][0].beforeSend({
+                abort : spy
+            });
+
+            expect(hashmap.has(spy)).to.be.ok;
+
+            http.off(spy);
+
+            expect(hashmap.has(spy)).to.be.not.ok;
+        });
+
+
     });
 
 });

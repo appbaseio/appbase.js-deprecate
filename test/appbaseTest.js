@@ -8,6 +8,8 @@ var sinon = require("sinon");
 var Promise = require("bluebird");
 var HashMap = require("hashmap");
 var chai = require("chai");
+var AuthService     = require("../src/OAuthService");
+var Auth            = require("../src/OAuth/auth");
 var expect = chai.expect;
 
 describe('Appbase global object Behavior', function() {
@@ -15,7 +17,7 @@ describe('Appbase global object Behavior', function() {
     var appbase;
 
     beforeEach(function() {
-        appbase = new Appbase(Collection, HTTP, App, URL, HashMap);
+        appbase = new Appbase(Collection, HTTP, App, URL, HashMap, {}, {}, AuthService, Auth);
     });
 
     it("Should return a App instance", function() {

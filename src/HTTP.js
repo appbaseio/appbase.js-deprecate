@@ -1,6 +1,8 @@
 
 function HTTP (appname, secret, callbackToRequest, Promise, atomic, URL) {
 
+    var appToken;
+
     function xhrBuilder(method) {
         return function(url, body) {
             var resolve, reject;
@@ -11,9 +13,7 @@ function HTTP (appname, secret, callbackToRequest, Promise, atomic, URL) {
 
             atomic[method]({
                 url : URL.ROOT + '/' + appname + url,
-                headers : {
-                    'Appbase-Secret' : secret
-                },
+                headers : getHeaders(),
                 data : body
             })
             .success(resolve).error(reject);
@@ -32,9 +32,7 @@ function HTTP (appname, secret, callbackToRequest, Promise, atomic, URL) {
     this.on = function(url, callback, errorCallback) {
         atomic.get({
             url : URL.ROOT + '/' + appname + url + '?streamonly=true',
-            headers : {
-                'Appbase-Secret' : secret
-            },
+            headers : getHeaders(),
             beforeSend : function(request){
                 var requests = callbackToRequest.has(callback) ? callbackToRequest.get(callback) : [];
                 requests.push(request);
@@ -69,6 +67,20 @@ function HTTP (appname, secret, callbackToRequest, Promise, atomic, URL) {
         });
 
         callbackToRequest.remove(callback);
+    }
+
+    this.setToken = function setToken(token) {
+        appToken = token;
+    }
+
+    this.getApp = function getApp() {
+        return appname;
+    }
+
+    function getHeaders() { // Should send the token, if present
+        return {
+            'Appbase-Secret' : secret
+        }
     }
 
 }

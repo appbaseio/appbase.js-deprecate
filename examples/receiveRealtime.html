@@ -8,6 +8,7 @@
             var log = console.log.bind(console);
             var error = console.error.bind(console);
             var AppTest = Appbase.app("rest_test", "193dc4d2440146082ea734f36f4f2638");
+            AppTest.oauth.authPopup('facebook', {}, console.log.bind(console))
             var userCollection = AppTest.collection('user');
 
             userCollection.onDocuments(function(argument) {

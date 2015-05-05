@@ -52,12 +52,16 @@ validator.instanceOf = {
 
 validator.typeOf = {
     validate : function(input, definition) {
-        var types = typeof(types) === 'string' ? [definition.type] : definition.type; 
+        var types = typeof(definition.type) === 'string' ? [definition.type] : definition.type;
+        var valid = false;
         for (var i = types.length - 1; i >= 0; i--) {
-            if(typeof(input) !== types[i]){
-                return getName(definition) + " should have the types " + types.join(' or ');
+            if(typeof(input) === types[i]){
+                valid = true;
             }
         };
+        if(!valid){
+            return getName(definition) + " should have the types " + types.join(' or ');
+        }
     }
 };
 
@@ -86,5 +90,23 @@ validator.number = {
         }
     }
 };
+
+validator.number = {
+    validate : function(input, definition) {
+        if(isNaN(input)){
+            return getName(definition) + " should be a number";
+        }
+    }
+};
+
+validator.inArray = {
+    validate : function(input, definition) {
+        if(definition.array.indexOf(input) === -1){
+            return getName(definition) + " should be either: " + definition.array.join(', ');
+        }
+    }
+};
+
+
 
 module.exports = validator;
