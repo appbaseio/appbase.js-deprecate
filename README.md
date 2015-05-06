@@ -77,7 +77,7 @@ Returns a Collection object for the provided name
 
 Parameters:  
  ```
- - query: String - The name of the collection, should already exists in your dashboard.  
+ - name: String - The name of the collection, should already exists in your dashboard.  
  ```
  
 ```javascript
@@ -90,7 +90,91 @@ Provides an interface to the Appbase's REST endpoints to manage your collections
 [View in the REST API Docs](http://docs.appbase.io/#/v3.0/rest/api-reference)
 
 ----------
+## Properties
+```
+**name** String - The name of the collection
+```
+
 ## Methods
+
+**collection.search(query)**
+Searches the collection's documents with the provided query.
+[View in the REST API Docs](http://docs.appbase.io/#/v3.0/rest/api-reference#api-reference-collection-search-documents-by-propertyies)    
+Parameters:  
+ ```
+ - query: Object - A JS Object to query the collection.
+ ```
+
+```javascript
+    userCollection.search({
+        filter : {
+            term : {
+                foo : 'bar'
+            }
+        }
+    }).then(function(response) {
+        console.log(response.hits.hits)
+    });
+```
+
+**collection.insert(entry)**
+Create a new document in the collection
+[View in the REST API Docs](http://docs.appbase.io/#/v3.0/rest/api-reference#api-reference-document-properties-create-update-document-properties)
+
+Parameters:  
+ ```
+ - entry: Object - A JS Object to be added to the collection.
+ ```
+
+```javascript
+    userCollection.insert({
+        foo : 'bar',
+        name : 'aName'
+    }).then(function(response) {
+        console.log(response)
+        /*
+            {
+                "foo": "bar",
+                "name": "aName",
+                "_id": "c12c7649-53e3-44bf-bbe8-f23769885eb0",
+                "_collection": "calls",
+                "_timestamp": 1430943009686
+            }
+        */
+    });
+```
+
+**collection.set(key, entry)**
+Create a new document in the collection, with the provided key as the id of that object.
+[View in the REST API Docs](http://docs.appbase.io/#/v3.0/rest/api-reference#api-reference-document-properties-create-update-document-properties)
+
+Parameters:  
+ ```
+ - key: String - A unique key.
+ - entry: Object - A JS Object to be added to the collection.
+ ```
+
+```javascript
+    userCollection.set('12345', {
+        foo : 'bar',
+        name : 'aName'
+    }).then(function(response) {
+        console.log(response)
+        /*
+            {
+                "foo": "bar",
+                "name": "aName",
+                "_id": "12345",
+                "_collection": "calls",
+                "_timestamp": 1430943009686
+            }
+        */
+    });
+```
+
+
+
+
 
 
 
