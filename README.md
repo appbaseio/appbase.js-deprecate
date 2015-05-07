@@ -53,7 +53,7 @@ This method retrieves all the collections of the app.
 [View in the REST API Docs](http://docs.appbase.io/#/v3.0/rest/api-reference#api-reference-global-list-collections)  
 
 ```javascript
-    AppTest.listCollections()
+    AppTest.listCollections() // Returns a promise
     .then(function(collections) {
         collections.forEach(function(collection) { // The collections variable is a array of Collection
             console.log(collection.name);
@@ -66,7 +66,7 @@ Returns the server timestamp in milliseconds.
 [View in the REST API Docs](http://docs.appbase.io/#/v3.0/rest/api-reference#api-reference-global-server-time)  
 
 ```javascript
-    AppTest.serverTime()
+    AppTest.serverTime() // Returns a promise
     .then(function(time) {
         console.log(time); // 1430941365939
     });
@@ -106,7 +106,7 @@ Parameters:
  ```
 
 ```javascript
-    userCollection.search({
+    userCollection.search({ // Returns a promise
         filter : {
             term : {
                 foo : 'bar'
@@ -127,7 +127,7 @@ Parameters:
  ```
 
 ```javascript
-    userCollection.insert({
+    userCollection.insert({ // Returns a promise
         foo : 'bar',
         name : 'aName'
     }).then(function(response) {
@@ -155,7 +155,7 @@ Parameters:
  ```
 
 ```javascript
-    userCollection.set('12345', {
+    userCollection.set('12345', { // Returns a promise
         foo : 'bar',
         name : 'aName'
     }).then(function(response) {
@@ -183,7 +183,7 @@ Parameters:
  ```
 
 ```javascript
-    userCollection.unset('12345', ['bar']).then(function(response) {
+    userCollection.unset('12345', ['bar']).then(function(response) { // Returns a promise
         console.log(response)
         /*
             {
@@ -207,7 +207,7 @@ Parameters:
  ```
 
 ```javascript
-    userCollection.get('12345').then(function(response) {
+    userCollection.get('12345').then(function(response) { // Returns a promise
         console.log(response)
         /*
             {
@@ -231,7 +231,7 @@ Parameters:
  ```
 
 ```javascript
-    userCollection.getAll({
+    userCollection.getAll({ // Returns a promise
         limit : 3, // Get 3 objects
         skip : 2   // Start by the second
     }).then(function(response) {
@@ -337,7 +337,7 @@ Parameters:
  ```
 
 ```javascript
-    userCollection.setRef('12345', 'friend', 'user/sagar').then(function(response) {
+    userCollection.setRef('12345', 'friend', 'user/sagar').then(function(response) { // Returns a promise
         console.log(response);
         /*
         {
@@ -360,7 +360,7 @@ Parameters:
  ```
 
 ```javascript
-    userCollection.getRefs('12345', {
+    userCollection.getRefs('12345', { // Returns a promise
         limit : 3, // Get 3 objects
         skip : 2   // Start by the second
     }).then(function(response) {
@@ -395,7 +395,7 @@ Parameters:
  ```
 
 ```javascript
-    userCollection.unsetRefs('12345', ['friend']).then(function(response) {
+    userCollection.unsetRefs('12345', ['friend']).then(function(response) { // Returns a promise
         console.log(response);
     });
 ```
@@ -410,7 +410,7 @@ Parameters:
  ```
 
 ```javascript
-    userCollection.delete('12345').then(function(response) {
+    userCollection.delete('12345').then(function(response) { // Returns a promise
         console.log(response);
         /*
         {
