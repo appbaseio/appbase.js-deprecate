@@ -145,7 +145,7 @@ Parameters:
 ```
 
 **collection.set(key, entry)**
-Create a new document in the collection, with the provided key as the id of that object.
+Create or update a new document in the collection, with the provided key as the id of that object.
 [View in the REST API Docs](http://docs.appbase.io/#/v3.0/rest/api-reference#api-reference-document-properties-create-update-document-properties)
 
 Parameters:  
@@ -171,6 +171,260 @@ Parameters:
         */
     });
 ```
+
+**collection.unset(key, properties)**
+Delete specific (or all) data properties of a document.
+[View in the REST API Docs](http://docs.appbase.io/#/v3.0/rest/api-reference#api-reference-document-properties-delete-document-properties)
+
+Parameters:  
+ ```
+ - key: String - Document's unique key.
+ - entry: Array<String> - A array of Strings with the name of the properties tobe removed.
+ ```
+
+```javascript
+    userCollection.unset('12345', ['bar']).then(function(response) {
+        console.log(response)
+        /*
+            {
+                "foo": "", // Notice that foo is now empty
+                "name": "aName",
+                "_id": "12345",
+                "_collection": "calls",
+                "_timestamp": 1430943009686
+            }
+        */
+    });
+```
+
+**collection.get(key)**
+Read the existing document properties.
+[View in the REST API Docs](http://docs.appbase.io/#/v3.0/rest/api-reference#api-reference-document-properties-read-document-properties)
+
+Parameters:  
+ ```
+ - key: String - Document's unique key.
+ ```
+
+```javascript
+    userCollection.get('12345').then(function(response) {
+        console.log(response)
+        /*
+            {
+                "foo": "",
+                "name": "aName",
+                "_id": "12345",
+                "_collection": "calls",
+                "_timestamp": 1430943009686
+            }
+        */
+    });
+```
+
+**collection.getAll([filters])**
+List the documents in the collection. Returns an array of documents in the given collection.
+[View in the REST API Docs](http://docs.appbase.io/#/v3.0/rest/api-reference#api-reference-collection-list-all-documents)
+
+Parameters:  
+ ```
+ - filters: Object - Optional Object to paginate the collection's documents, you may specify limit and skip.
+ ```
+
+```javascript
+    userCollection.getAll({
+        limit : 3, // Get 3 objects
+        skip : 2   // Start by the second
+    }).then(function(response) {
+        console.log(response)
+        /*
+            [
+                {
+                    "foo": "bar",
+                    "_collection": "user",
+                    "_id": "4fcaaab1636e48ca988ffe075ec820b5",
+                    "_timestamp": 1427918110979
+                },
+                {
+                    "foo": "bar",
+                    "_collection": "user",
+                    "_id": "77623095cf284c4c8768a0393e40aacf",
+                    "_timestamp": 1427920330170
+                },
+                {
+                    "name": "sid",
+                    "name1": "sagar",
+                    "_collection": "user",
+                    "_id": "sid",
+                    "_timestamp": 1428103822887
+                }
+            ]
+        */
+    });
+```
+
+**collection.on(key, callback[, errorCallback])**
+Listen to changes on the Document with the provided key.
+
+
+Parameters:  
+ ```
+ - key: String - Document's unique key.
+ - callback: Function - A function to be called whenever a change occurs to the Document.
+ - errorCallback: Function - A function to be called whenever a error occurs in the call, may be called more than once.
+ ```
+
+```javascript
+    userCollection.on('12345', function(response) {
+        console.log(response); // Will log the object every time it has a change
+    });
+```
+
+
+**collection.onDocuments(callback[, errorCallback])**
+Listen to the creation or changes on any Document in the collection.
+
+Parameters:  
+ ```
+ - callback: Function - A function to be called whenever a new Document is created or a change occurs to a Document.
+ - errorCallback: Function - A function to be called whenever a error occurs in the call, may be called more than once.
+ ```
+
+```javascript
+    userCollection.onDocuments(function(response) {
+        console.log(response); // Will log the object every time it has a new or changed Document
+    });
+```
+
+**collection.onRef(key, callback[, errorCallback])**
+Listen to the creation or changes of References on the Document that has the provided key.
+
+Parameters:  
+ ```
+ - key: String - Document's unique key.
+ - callback: Function - A function to be called whenever a new Reference is created or a changes in a Document.
+ - errorCallback: Function - A function to be called whenever a error occurs in the call, may be called more than once.
+ ```
+
+```javascript
+    userCollection.onRef('12345', function(response) {
+        console.log(response); // Will log the object every time it has a new or changed Ref in the Document
+        /*
+        {
+            "friend": {
+                "_timestamp": 1431040446952,
+                "_json": {
+                    "_id": "sagar",
+                    "name1": "sagar",
+                    "name": "1123",
+                    "_collection": "user",
+                    "_timestamp": 1429562388858
+                }
+            }
+        } */
+    });
+```
+
+
+**collection.setRef(key, ref, path[, priority])**
+Listen to the creation or changes of References on the Document that has the provided key.
+[View in the REST API Docs](http://docs.appbase.io/#/v3.0/rest/api-reference#api-reference-document-references-create-update-document-references)
+
+Parameters:  
+ ```
+ - key: String - Document's unique key.
+ - callback: Function - A function to be called whenever a new Reference is created or a changes in a Document.
+ - errorCallback: Function - A function to be called whenever a error occurs in the call, may be called more than once.
+ ```
+
+```javascript
+    userCollection.setRef('12345', 'friend', 'user/sagar').then(function(response) {
+        console.log(response);
+        /*
+        {
+            "friend": {
+                "timestamp": 1431040446952
+            }
+        }
+        */
+    });
+```
+
+**collection.getRefs(key[, filters])**
+Get all the References of the Document with the provided key.
+[View in the REST API Docs](http://docs.appbase.io/#/v3.0/rest/api-reference#api-reference-document-references-read-references)
+
+Parameters:  
+ ```
+ - key: String - Document's unique key.
+ - filters: Object - Optional Object to paginate the documents's References, you may specify limit and skip.
+ ```
+
+```javascript
+    userCollection.getRefs('12345', {
+        limit : 3, // Get 3 objects
+        skip : 2   // Start by the second
+    }).then(function(response) {
+        console.log(response);
+        /*
+        [
+            {
+                "friend": {
+                    "_timestamp": 1431040446952,
+                    "_json": {
+                        "_id": "sagar",
+                        "name1": "sagar",
+                        "name": "1123",
+                        "_collection": "user",
+                        "_timestamp": 1429562388858
+                    }
+                }
+            }
+        ]
+        */
+    });
+```
+
+**collection.unsetRefs(key, references)**
+Removes the provided References from the Document with the provided key.
+[View in the REST API Docs](http://docs.appbase.io/#/v3.0/rest/api-reference#api-reference-document-references-delete-references)
+
+Parameters:  
+ ```
+ - key: String - Document's unique key.
+ - references: Array<String> - Names of References to be removed from the object.
+ ```
+
+```javascript
+    userCollection.unsetRefs('12345', ['friend']).then(function(response) {
+        console.log(response);
+    });
+```
+
+
+**collection.delete(key)**
+Removes the Document with the provided key from the collection.
+
+Parameters:  
+ ```
+ - key: String - Document's unique key.
+ ```
+
+```javascript
+    userCollection.delete('12345').then(function(response) {
+        console.log(response);
+        /*
+        {
+            "_collection": "user",
+            "_id": "4fcaaab1636e48ca988ffe075ec820b5",
+            "_timestamp": 1431042743261,
+            "_deleted": true
+        }
+        */
+    });
+```
+
+
+
 
 
 
