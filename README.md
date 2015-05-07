@@ -92,7 +92,7 @@ Provides an interface to the Appbase's REST endpoints to manage your collections
 ----------
 ## Properties
 ```
-**name** String - The name of the collection
+name String - The name of the collection
 ```
 
 ## Methods
