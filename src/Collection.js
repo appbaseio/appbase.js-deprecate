@@ -7,6 +7,8 @@ function Collection(name, http, URL, uuid) {
     function getPath(key) {
         return key.indexOf('/') !== -1 ? path + key : path + "/" + key;
     }
+
+    this.name = name;
     
     this.search = function search(query) {
         return http.post(getPath(URL.SEARCH), query);
@@ -35,26 +37,30 @@ function Collection(name, http, URL, uuid) {
     
     this.getAll = function getAll(filters) {
         var entryPath = getPath(URL.DOCUMENTS);
-        return http.get(entryPath, (filters || {}));
+        filters = filters || {};
+        return http.get(entryPath, {
+            limit : filters.limit,
+            skip  : filters.skip
+        });
     }
     
-    this.on = function on(key, callback) {
+    this.on = function on(key, callback, errorCallback) {
         var entryPath = getPath(key) + URL.PROPERTIES;
-        http.on(entryPath, callback);
+        http.on(entryPath, callback, errorCallback);
     }
     
     this.off = function off(callback) {
         return http.off(callback);
     }
     
-    this.onDocuments = function onDocuments(callback) {
+    this.onDocuments = function onDocuments(callback, errorCallback) {
         var entryPath = getPath(URL.DOCUMENTS);
-        return http.on(entryPath, callback);
+        return http.on(entryPath, callback, errorCallback);
     }
     
-    this.onRef = function onRef(key, callback) {
+    this.onRef = function onRef(key, callback, errorCallback) {
         var entryPath = getPath(key) + URL.REFERENCES;
-        return http.on(entryPath, callback);
+        return http.on(entryPath, callback, errorCallback);
     }
     
     this.setRef = function setRef(key, ref, path, priority) {
@@ -66,7 +72,11 @@ function Collection(name, http, URL, uuid) {
     
     this.getRefs = function getRefs(key, filters) {
         var entryPath = getPath(key) + URL.REFERENCES;
-        return http.get(entryPath, (filters || {}));
+        filters = filters || {};
+        return http.get(entryPath, {
+            limit : filters.limit,
+            skip  : filters.skip
+        });
     }
 
     this.unsetRef = function unsetRef(key, references) {
@@ -182,8 +192,8 @@ Collection.setRef = DefinitionBuilder.build().add()
     .validator('documentKey')
     .add()
     .name('ref')
-    .validator('instanceOf')
-    .type(Object)
+    .validator('typeOf')
+    .type('string')
     .add()
     .name('path')
     .validator('documentPath')

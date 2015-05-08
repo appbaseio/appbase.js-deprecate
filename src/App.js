@@ -1,13 +1,19 @@
 var DefinitionBuilder = require('./DefinitionBuilder');
 
-function App(Collection, http, URL, map) {
+function App(Collection, http, URL, map, uuid) {
 
     this.search = function appSearch(query) {
-        return http.post(URL.SEARCH, query);
+        return http.post(URL.SEARCH, {
+            // body : {
+                query : query
+            // }
+        });
     }
 
     this.listCollections = function listCollections() {
-        return http.get(URL.COLLECTIONS);
+        return http.get(URL.COLLECTIONS).then(function(collections) {
+            return collections.map(toCollection);
+        });
     }
 
     this.serverTime = function serverTime() {
@@ -15,8 +21,13 @@ function App(Collection, http, URL, map) {
     }
 
     this.collection = function collection(name) {
-        return map.has(name) ? map.get(name) : map.set(name, new Collection(name, http, URL)).get(name);
+        return map.has(name) ? map.get(name) : map.set(name, new Collection(name, http, URL, uuid)).get(name);
     }
+
+    var toCollection = (function(collection) {
+        return this.collection(collection);
+    }).bind(this);
+
 }
 
 App.search = DefinitionBuilder.build().add()

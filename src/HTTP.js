@@ -11,15 +11,34 @@ function HTTP (appname, secret, callbackToRequest, Promise, atomic, URL) {
                 reject = rej;
             });
 
-            atomic[method]({
-                url : URL.ROOT + '/' + appname + url,
-                headers : getHeaders(),
-                data : body
-            })
+            url = URL.ROOT + '/' + appname + url;
+
+            var request = {
+                url : url,
+                headers : getHeaders()
+            };
+
+            if(method === 'get'){
+                request.url = typeof(body) === 'object' ? appendParams(url, body) : url;
+            } else {
+                request.data = body
+            }
+
+            atomic[method](request)
             .success(resolve).error(reject);
 
             return promise;
         }
+    }
+
+    function appendParams (url, body) {
+        for(var i in body){
+            if(body[i] !== undefined && body.hasOwnProperty(i)){
+                url = url.indexOf('?') === -1 ? url + '?' : url;
+                url = url + i + '=' + body[i];
+            }
+        }
+        return url;
     }
 
     var methods = ['get', 'put', 'post', 'patch', 'delete'];
@@ -46,14 +65,17 @@ function HTTP (appname, secret, callbackToRequest, Promise, atomic, URL) {
             try {
                 array = JSON.parse('[' + arrayInner + ']');
             } catch(e) {
-                errorCallback('Invalid JSON object: ' + arrayInner);
+                if(errorCallback){
+                    errorCallback('Invalid JSON object: ' + arrayInner);
+                }
                 return;
             }
 
             for(var i = 0, length = array.length; i < length; i++){
                 callback(array[i]);
             }
-        });
+        })
+        .error(errorCallback);
     };
 
     this.off = function off (callback) {
