@@ -28,7 +28,7 @@ gulp.task('build', function () {
   config.destFile = "appbase.min.js";
   return gulp.src([config.src])
     .pipe(browserified)
-    // .pipe(uglify())
+    .pipe(uglify())
     .pipe(rename(config.destFile))
     .pipe(insert.prepend(config.versionString))
     .pipe(gulp.dest(config.dest));

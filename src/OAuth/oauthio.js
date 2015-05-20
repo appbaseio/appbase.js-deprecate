@@ -1,3 +1,6 @@
+if(typeof(window) === 'undefined'){
+    return;
+}
 var OAuth;
 var isOAuthLoaded = (window.OAuth !== undefined);
  

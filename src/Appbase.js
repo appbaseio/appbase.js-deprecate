@@ -5,7 +5,7 @@ function Appbase(Collection, http, App, URL, HashMap, Promise, atomic, AuthServi
     this.app = function app(name, secret) {
         var appHttp =  new http(name, secret, new HashMap(), Promise, atomic, URL);
         var app = new App(Collection, appHttp, URL, new HashMap(), uuid);
-        if(typeof window !== undefined){
+        if(typeof window !== 'undefined'){
             app.oauth = new AuthService(new Auth(appHttp));
         }
         return app;
