@@ -93,15 +93,15 @@ function Collection(name, http, URL, uuid) {
 
 Collection.search = DefinitionBuilder.build().add()
     .name('query')
-    .validator('instanceOf')
-    .type(Object)
+    .validator('typeOf')
+    .type('object')
     .optional()
     .end();
 
 Collection.insert = DefinitionBuilder.build().add()
     .name('entry')
-    .validator('instanceOf')
-    .type(Object)
+    .validator('typeOf')
+    .type('object')
     .end();
 
 Collection.set = DefinitionBuilder.build().add()
@@ -109,8 +109,8 @@ Collection.set = DefinitionBuilder.build().add()
     .validator('documentKey')
     .add()
     .name('entry')
-    .validator('instanceOf')
-    .type(Object)
+    .validator('typeOf')
+    .type('object')
     .end();
 
 Collection.unset = DefinitionBuilder.build().add()
@@ -118,8 +118,8 @@ Collection.unset = DefinitionBuilder.build().add()
     .validator('documentKey')
     .add()
     .name('property')
-    .validator('instanceOf')
-    .type(Object)
+    .validator('typeOf')
+    .type('object')
     .end();
 
 Collection.get = DefinitionBuilder.build().add()
@@ -129,8 +129,8 @@ Collection.get = DefinitionBuilder.build().add()
 
 Collection.getAll = DefinitionBuilder.build().add()
     .name('filters')
-    .validator('instanceOf')
-    .type(Object)
+    .validator('typeOf')
+    .type('object')
     .optional()
     .end();
 
@@ -139,14 +139,14 @@ Collection.on = DefinitionBuilder.build().add()
     .validator('documentKey')
     .add()
     .name('callback')
-    .validator('instanceOf')
-    .type(Function)
+    .validator('typeOf')
+    .type('function')
     .end();
 
 Collection.onDocuments = DefinitionBuilder.build().add()
     .name('callback')
-    .validator('instanceOf')
-    .type(Function)
+    .validator('typeOf')
+    .type('function')
     .end();
 
 Collection.onRef = DefinitionBuilder.build().add()
@@ -154,8 +154,8 @@ Collection.onRef = DefinitionBuilder.build().add()
     .validator('documentKey')
     .add()
     .name('callback')
-    .validator('instanceOf')
-    .type(Function)
+    .validator('typeOf')
+    .type('function')
     .end();
 
 Collection.off = DefinitionBuilder.build().add()
@@ -163,8 +163,8 @@ Collection.off = DefinitionBuilder.build().add()
     .validator('documentKey')
     .add()
     .name('callback')
-    .validator('instanceOf')
-    .type(Function)
+    .validator('typeOf')
+    .type('function')
     .optional()
     .end();
 
@@ -173,8 +173,8 @@ Collection.getRefs = DefinitionBuilder.build().add()
     .validator('documentKey')
     .add()
     .name('filters')
-    .validator('instanceOf')
-    .type(Object)
+    .validator('typeOf')
+    .type('object')
     .optional()
     .end();
 
