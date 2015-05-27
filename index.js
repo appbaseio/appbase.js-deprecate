@@ -1,7 +1,7 @@
 
 var validator = require("./src/validators");
 
-var Decorator       = new (require("./src/decorator"))(validator);
+var Decorator       = new (require("./src/Decorator"))(validator);
 var HTTP            = require("./src/HTTP");
 var App             = require("./src/App");
 var Collection      = require("./src/Collection");

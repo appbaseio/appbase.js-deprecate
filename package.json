@@ -3,6 +3,10 @@
   "version": "3.0.0",
   "description": "JavaScript library for Appbase [Appbase.io](http://appbase.io) Current Version: 3.0.0",
   "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/appbaseio/appbase.js.git"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
